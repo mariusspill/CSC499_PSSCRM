@@ -38,13 +38,19 @@ class Review:
     repo_owner: str
     repo_name: str
     repo_full_name: str
-    pull_request_id: str
+    repo_id: int
+
     pull_request_number: str
+ 
     review_id: str
     reviewer_id: str
     reviewer_login: str
+    reviewer_type: str
+
     state: str
     submitted_at: str
+    is_automation: bool
+
 
 class Comment:
     repo_owner: str
@@ -148,22 +154,35 @@ def fetch_pull_requests(repo_owner:str, repo_name:str, token:str,
         return None
 
 
-def parse_review(review_json:dict, repo_owner: str, repo_name:str, pr_number:str, pr_id:str) -> Review:
+def parse_review(review_json:dict, repo_owner: str, repo_name: str, repo_id: int, pr_number:str) -> Review:
     result = Review()
 
     result.repo_owner = repo_owner
     result.repo_name = repo_name
     result.repo_full_name = f"{repo_owner}/{repo_name}"
+    result.repo_id = repo_id
 
-    result.pull_request_id = pr_id
     result.pull_request_number = pr_number
 
     result.review_id = review_json['id']
     result.reviewer_id = review_json['user']['id']
     result.reviewer_login = review_json['user']['login']
+    result.reviewer_type = review_json['user']['type']
 
     result.state = review_json['state']
     result.submitted_at = review_json['submitted_at']
+
+    denylist = ['k8s-ci-robot', 
+                'github-actions']
+
+    if result.author_login.endswith('bot'):
+        result.is_automation = True
+    elif result.author_login in denylist:
+        result.is_automation = True
+    elif result.author_type == 'Bot':
+        result.is_automation = True
+    else:
+        result.is_automation = False
 
     return result
 
@@ -226,9 +245,11 @@ def parse_comment(comment_json: dict, repo_owner: str, repo_name: str, repo_id:i
 
 
 def debug():
-    data = fetch_comments('cockroachdb', 'cockroach', 163371, token)
-    cm = parse_comment(data[0], 'cockroachdb', 'cockroach', 16563587, 163371)
-    print(cm.is_automation)
+    pass
+
+
+
 
 if __name__ == "__main__":
-    debug()
+    x = fetch_reviews('facebook', 'react', 35648, token)
+    print(json.dumps(x, indent=2))

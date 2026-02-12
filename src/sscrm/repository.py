@@ -3,6 +3,8 @@ from pathlib import Path
 from github import PullRequest
 from github import Repository
 from github import Comment
+from github import Review
+import github as gh
 
 DB_PATH = 'sscrm.sqlite'
 
@@ -164,6 +166,52 @@ INSERT INTO comments (
         conn.commit()
 
 
+def create_reviews_table():
+    with sqlite3.connect(DB_PATH) as conn:
+        cur = conn.cursor()
+
+        conn.execute("PRAGMA foreign_keys = ON;")
+
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS reviews(
+                    review_id INTEGER PRIMARY KEY,
+                    repo_owner TEXT,
+                    repo_name TEXT,
+                    repo_id INTEGER NOT NULL,
+                    pr_number INTEGER NOT NULL,
+                    reviewer_login TEXT,
+                    reviewer_id INTEGER,
+                    reviewer_type TEXT,
+                    state TEXT,
+                    submitted_at TEXT,
+                    is_automation INTEGER,
+
+                    FOREIGN KEY (repo_id) REFERENCES repositories(id),
+                    FOREIGN KEY (repo_id, pr_number) REFERENCES pull_requests(repo_id, pr_number)
+                    );
+""")
+
+        conn.commit()
+
+
+def save_review(rv: Review):
+    with sqlite3.connect(DB_PATH) as conn:
+        cur = conn.cursor()
+
+        conn.execute("PRAGMA foreign_keys = ON;")
+
+        cur.execute("""
+INSERT INTO reviews (
+                    review_id, repo_owner, repo_name, repo_id, pr_number, reviewer_login, reviewer_id, 
+                    reviewer_type, state, submitted_at, is_automation)
+                    
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(comment_id) DO NOTHING;
+                        """, (rv.review_id, rv.repo_owner, rv.repo_name, rv.repo_id, rv.pull_request_number,
+                              rv.reviewer_login, rv.reviewer_id, rv.reviewer_type, rv.state, rv.submitted_at, rv.is_automation))
+        
+        conn.commit()
+
+
 def get_repos_from_db():
     with sqlite3.connect(DB_PATH) as conn:
         cur = conn.cursor()
@@ -175,3 +223,22 @@ def get_repos_from_db():
                     """)
         
         return cur.fetchall()
+    
+
+def get_prs_from_db(cursor: int=10000000000):
+    with sqlite3.connect(DB_PATH) as conn:
+        cur = conn.cursor()
+
+        cur.execute(f"""
+            SELECT repo_full_name, repo_id, pr_number, pr_id  FROM pull_requests WHERE pr_id < {cursor}  ORDER BY pr_id DESC LIMIT 100;
+""")
+
+        conn.execute("PRAGMA foreign_keys = ON;")
+
+        return cur.fetchall()
+    
+
+if __name__ == "__main__":
+    cm = gh.debug()
+    print(cm.repo_id, cm.pr_number)
+    save_comment(cm)

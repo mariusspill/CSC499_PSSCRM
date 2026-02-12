@@ -15,13 +15,24 @@ CSV_PATH = BASE_DIR / "data" / "raw" / "repos_list.csv"
 
 CHECKPOINT_FILE = Path("checkpoints.json")
 
+CHECKPOINT_PR_FILE = Path("checkpoints2.json")
+
 def load_checkpoints() -> dict:
     if CHECKPOINT_FILE.exists():
         return json.loads(CHECKPOINT_FILE.read_text())
     return {}
 
+def load_checkpoints_pr() -> dict:
+    if CHECKPOINT_PR_FILE.exists():
+        return json.loads(CHECKPOINT_PR_FILE.read_text())
+    return {}
+
 def save_state(state: dict) -> None:
     CHECKPOINT_FILE.write_text(json.dumps(state, indent=2, sort_keys=True))
+
+
+def save_state_pr(state:dict) -> None:
+    CHECKPOINT_PR_FILE.write_text(json.dumps(state, indent=2, sort_keys=True))
 
 
 def build_repo_table():
@@ -96,9 +107,39 @@ def build_pr_table():
 
 
 def build_comments_table():
+    rp.create_comments_table()
+
+    progress = load_checkpoints_pr()
+
+    cursor_pr_id = progress.get('pr_id', 10000000000)
+
+    tpr = rp.get_prs_from_db(cursor_pr_id)
+
+
+    while len(tpr) > 0:
+        tpr = rp.get_prs_from_db(cursor_pr_id)
+
+        for full_name, repo_id, pr_number, pr_id in tpr:
+            owner = full_name.split('/')[0]
+            name = full_name.split('/')[1]
+
+            cm_json = gh.fetch_comments(owner, name, pr_number, gh.token)
+
+            for cm in cm_json:
+                try:
+                    cm_object = gh.parse_comment(cm, owner, name, repo_id, pr_number)
+                    rp.save_comment(cm_object)
+                except:
+                    print(f"Error: {owner}, {name}, {repo_id}, {pr_number}")
+                
+            cursor_pr_id = pr_id
+            progress['pr_id'] = cursor_pr_id
+            save_state_pr(progress)
+        print(cursor_pr_id)
+
+
+def build_review_table():
     pass
 
-
 if __name__ == "__main__":
-    build_repo_table()
-    build_pr_table()
+    build_comments_table()
