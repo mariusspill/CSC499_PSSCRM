@@ -1,3 +1,7 @@
 
 # Editor settings
 .vscode/
+
+# Data and caches
+sscrm.sqlite
+src/sscrm/__pycache__
