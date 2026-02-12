@@ -138,7 +138,7 @@ def build_comments_table():
         print(cursor_pr_id)
 
 
-def build_review_table():
+def build_reviews_table():
     pass
 
 if __name__ == "__main__":
