@@ -1,0 +1,182 @@
+{
+  "anchore/grype": {
+    "backfill_page": 2,
+    "completed": false,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "angular/angular": {
+    "backfill_page": 349,
+    "completed": true,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "apache/airflow": {
+    "backfill_page": 427,
+    "completed": true,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "apache/spark": {
+    "backfill_page": 544,
+    "completed": true,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "aquasecurity/trivy": {
+    "backfill_page": 2,
+    "completed": false,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "bazelbuild/bazel": {
+    "backfill_page": 114,
+    "completed": true,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "cockroachdb/cockroach": {
+    "backfill_page": 818,
+    "completed": true,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "docker/cli": {
+    "backfill_page": 2,
+    "completed": false,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "etcd-io/etcd": {
+    "backfill_page": 138,
+    "completed": true,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "facebook/react": {
+    "backfill_page": 191,
+    "completed": true,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "golang/go": {
+    "backfill_page": 50,
+    "completed": true,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "grafana/grafana": {
+    "backfill_page": 722,
+    "completed": true,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "hashicorp/terraform": {
+    "backfill_page": 162,
+    "completed": true,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "helm/helm": {
+    "backfill_page": 66,
+    "completed": true,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "istio/istio": {
+    "backfill_page": 2,
+    "completed": false,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "jenkinsci/jenkins": {
+    "backfill_page": 118,
+    "completed": true,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "keras-team/keras": {
+    "backfill_page": 89,
+    "completed": true,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "kubernetes/kubernetes": {
+    "backfill_page": 880,
+    "completed": true,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "llvm/llvm-project": {
+    "backfill_page": 2,
+    "completed": false,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "moby/moby": {
+    "backfill_page": 280,
+    "completed": true,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "mrdoob/three.js": {
+    "backfill_page": 194,
+    "completed": true,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "nodejs/node": {
+    "backfill_page": 395,
+    "completed": true,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "prometheus/prometheus": {
+    "backfill_page": 112,
+    "completed": true,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "pytorch/pytorch": {
+    "backfill_page": 361,
+    "completed": false,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "redis/redis": {
+    "backfill_page": 76,
+    "completed": true,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "rust-lang/rust": {
+    "backfill_page": 908,
+    "completed": true,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "scikit-learn/scikit-learn": {
+    "backfill_page": 203,
+    "completed": true,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "sigstore/sigstore": {
+    "backfill_page": 23,
+    "completed": true,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "tensorflow/tensorflow": {
+    "backfill_page": 671,
+    "completed": true,
+    "last_pr_number": null,
+    "last_updated": null
+  },
+  "vercel/next.js": {
+    "backfill_page": 2,
+    "completed": false,
+    "last_pr_number": null,
+    "last_updated": null
+  }
+}
