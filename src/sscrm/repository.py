@@ -205,7 +205,7 @@ INSERT INTO reviews (
                     review_id, repo_owner, repo_name, repo_id, pr_number, reviewer_login, reviewer_id, 
                     reviewer_type, state, submitted_at, is_automation)
                     
-                    VALUES (?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(comment_id) DO NOTHING;
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(review_id) DO NOTHING;
                         """, (rv.review_id, rv.repo_owner, rv.repo_name, rv.repo_id, rv.pull_request_number,
                               rv.reviewer_login, rv.reviewer_id, rv.reviewer_type, rv.state, rv.submitted_at, rv.is_automation))
         
@@ -238,7 +238,25 @@ def get_prs_from_db(cursor: int=10000000000):
         return cur.fetchall()
     
 
+def get_newest_prs_from_db(sample_start= 1,sample_end=500, batchsize= 100, offset= 0):
+    """
+    returns a list of standardly 100 newest records of pr's for each repo
+    """
+    with sqlite3.connect(DB_PATH) as conn:
+        cur = conn.cursor()
+
+        conn.execute("PRAGMA foreign_keys = ON;")
+
+        # row number starts at 1
+
+        cur.execute(f"""WITH requests_ranked AS (SELECT repo_full_name, repo_id, pr_number, pr_id,
+                    ROW_NUMBER() OVER (PARTITION BY repo_id ORDER BY pr_number DESC) AS rn
+                    FROM pull_requests) SELECT repo_full_name, repo_id, pr_number, pr_id FROM requests_ranked WHERE rn BETWEEN ? AND ? ORDER BY pr_id DESC LIMIT ? OFFSET ?;""", (sample_start, sample_end, batchsize, offset))
+
+        return cur.fetchall()
+
+
+
+
 if __name__ == "__main__":
-    cm = gh.debug()
-    print(cm.repo_id, cm.pr_number)
-    save_comment(cm)
+    pass
