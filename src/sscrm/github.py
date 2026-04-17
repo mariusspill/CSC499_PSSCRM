@@ -85,7 +85,8 @@ class BinaryData:
     has_any_binary: bool
     has_strict_binary: bool
 
-token = "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"
+# Insert your token here
+token = "SECRET"
 
 
 def rate_limit():
@@ -316,17 +317,14 @@ def fetch_binary(repo_owner: str, repo_name: str):
     "Accept": "application/vnd.github+json"
     }
 
-    # Step 1: get default branch
     r = requests.get(f"https://api.github.com/repos/{repo_owner}/{repo_name}", headers=headers)
     repo_data = r.json()
     default_branch = repo_data["default_branch"]
 
-    # Step 2: get latest commit SHA of that branch
     r = requests.get(f"https://api.github.com/repos/{repo_owner}/{repo_name}/branches/{default_branch}", headers=headers)
     branch_data = r.json()
     sha = branch_data["commit"]["sha"]
 
-    # Step 3: get full file tree (THIS is the key call)
     r = requests.get(
         f"https://api.github.com/repos/{repo_owner}/{repo_name}/git/trees/{sha}?recursive=1",
         headers=headers
